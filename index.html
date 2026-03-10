@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Simple Auth</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:#222;
+color:white;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+}
+
+.box{
+background:#333;
+padding:30px;
+border-radius:10px;
+text-align:center;
+width:250px;
+}
+
+input{
+width:90%;
+padding:8px;
+margin:5px;
+}
+
+button{
+padding:8px 15px;
+margin-top:10px;
+cursor:pointer;
+}
+
+a{
+color:lightblue;
+cursor:pointer;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="box">
+
+<!-- SIGNUP -->
+<div id="signup">
+
+<h2>Signup</h2>
+
+<input type="text" id="sEmail" placeholder="Email"><br>
+<input type="password" id="sPass" placeholder="Password"><br>
+
+<button onclick="signup()">Signup</button>
+
+<p>Have account? <a onclick="showLogin()">Login</a></p>
+
+</div>
+
+
+<!-- LOGIN -->
+<div id="login" style="display:none">
+
+<h2>Login</h2>
+
+<input type="text" id="lEmail" placeholder="Email"><br>
+<input type="password" id="lPass" placeholder="Password"><br>
+
+<button onclick="login()">Login</button>
+
+<p>No account? <a onclick="showSignup()">Signup</a></p>
+
+</div>
+
+
+<!-- DASHBOARD -->
+<div id="dashboard" style="display:none">
+
+<h2>Dashboard</h2>
+
+<p id="welcome"></p>
+
+<button onclick="logout()">Logout</button>
+
+</div>
+
+</div>
+
+<script>
+
+// SIGNUP
+function signup(){
+
+var email = document.getElementById("sEmail").value;
+var pass = document.getElementById("sPass").value;
+
+if(email=="" || pass==""){
+alert("Fill all fields");
+return;
+}
+
+localStorage.setItem("email",email);
+localStorage.setItem("password",pass);
+
+alert("Signup successful");
+
+showLogin();
+
+}
+
+
+// LOGIN
+function login(){
+
+var email = document.getElementById("lEmail").value;
+var pass = document.getElementById("lPass").value;
+
+var savedEmail = localStorage.getItem("email");
+var savedPass = localStorage.getItem("password");
+
+if(email==savedEmail && pass==savedPass){
+
+localStorage.setItem("login","true");
+
+showDashboard(email);
+
+}else{
+
+alert("Wrong email or password");
+
+}
+
+}
+
+
+// LOGOUT
+function logout(){
+
+localStorage.removeItem("login");
+
+showLogin();
+
+}
+
+
+// SHOW LOGIN
+function showLogin(){
+
+document.getElementById("signup").style.display="none";
+document.getElementById("dashboard").style.display="none";
+document.getElementById("login").style.display="block";
+
+}
+
+
+// SHOW SIGNUP
+function showSignup(){
+
+document.getElementById("login").style.display="none";
+document.getElementById("signup").style.display="block";
+
+}
+
+
+// SHOW DASHBOARD
+function showDashboard(email){
+
+document.getElementById("login").style.display="none";
+document.getElementById("signup").style.display="none";
+document.getElementById("dashboard").style.display="block";
+
+document.getElementById("welcome").innerHTML="Welcome "+email;
+
+}
+
+
+// AUTO LOGIN CHECK
+window.onload=function(){
+
+var logged = localStorage.getItem("login");
+var email = localStorage.getItem("email");
+
+if(logged=="true"){
+showDashboard(email);
+}
+
+}
+
+</script>
+
+</body>
+</html>
